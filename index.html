@@ -144,7 +144,7 @@ footer h3{margin-top:0}
 <section class="section" id="categories"><div class="container">
 <div class="section-head"><div><h2 data-i18n="categoryTitle">جۆرەکانی شیرینی</h2><p data-i18n="categoryText">هەڵبژاردەیەکی خۆش بۆ هەموو ذوقێک</p></div></div>
 <div class="categories">
-  
+
 <a class="category" href="#products">
   <img src="https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=500&q=80">
   <b>BAK · پاقلاوە</b>
@@ -202,8 +202,8 @@ footer h3{margin-top:0}
 <div class="card"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=85"><div class="card-body"><span class="code">CHR-001</span><h3 data-i18n="chorek">چۆرەك</h3><p data-i18n="chorekDesc">چۆرەكی نەرم و تازە بۆ بەیانی.</p><div class="card-bottom"><span class="price">11,000 د.ع</span><button class="add" onclick="addItem('CHR-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
 <div class="card"><img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&w=700&q=85"><div class="card-body"><span class="code">CUP-001</span><h3 data-i18n="cupcake">کاب‌کیک</h3><p data-i18n="cupDesc">کاب‌کیکی جوان و گونجاو بۆ میوانی.</p><div class="card-bottom"><span class="price">4,500 د.ع</span><button class="add" onclick="addItem('CUP-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
 <div class="card"><img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=700&q=85"><div class="card-body"><span class="code">KUN-001</span><h3 data-i18n="kunafa">کونافە</h3><p data-i18n="kunDesc">کونافەی گەرم و پڕ لە تامی شیرین.</p><div class="card-bottom"><span class="price">4,000 د.ع</span><button class="add" onclick="addItem('KUN-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
-</div></div></section>
-  <!-- DHN - Duhna -->
+
+<!-- DHN - Duhna -->
 <div class="card">
   <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=85">
   <div class="card-body">
@@ -275,6 +275,8 @@ footer h3{margin-top:0}
   </div>
 </div>
 
+</div></div></section>
+
 <section class="section"><div class="container features">
 <div class="feature"><div class="icon">🚚</div><h3 data-i18n="f1">گەیاندنی خۆڕایی</h3><p data-i18n="f1t">بۆ سلێمانی، کەرکوک، دیالە و بەغدا.</p></div>
 <div class="feature"><div class="icon">🥮</div><h3 data-i18n="f2">تازە و کوالێتی</h3><p data-i18n="f2t">بەرهەمەکان بە وردی و خۆشەویستی ئامادە دەکرێن.</p></div>
@@ -315,7 +317,16 @@ function setLang(lang){
 function addItem(code){count++;document.getElementById("cartCount").textContent=count;document.getElementById("details").value+=(document.getElementById("details").value?"\n":"")+code+" × 1";showToast("✓ "+code+" added");}
 function showToast(text){let t=document.getElementById("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
 function toggleNav(){let n=document.getElementById("nav");n.style.display=n.style.display==="flex"?"none":"flex";n.style.flexDirection="column";n.style.position="absolute";n.style.top="70px";n.style.right="4%";n.style.background="#fffaf3";n.style.padding="18px";n.style.border="1px solid #eadfd4";n.style.borderRadius="18px"}
-function submitOrder(e){e.preventDefault();let body=`ناو: ${name.value}\nمۆبایل: ${phone.value}\nشار: ${city.value}\nکاتی گەیاندن: ${time.value}\nئۆردەر:\n${details.value}`;window.location.href="mailto:zanacam2005@gmail.com?subject=New Zana Sweet Room Order&body="+encodeURIComponent(body)}
+function submitOrder(e){
+  e.preventDefault();
+  const nameVal=document.getElementById("name").value;
+  const phoneVal=document.getElementById("phone").value;
+  const cityVal=document.getElementById("city").value;
+  const timeVal=document.getElementById("time").value;
+  const detailsVal=document.getElementById("details").value;
+  let body=`ناو: ${nameVal}\nمۆبایل: ${phoneVal}\nشار: ${cityVal}\nکاتی گەیاندن: ${timeVal}\nئۆردەر:\n${detailsVal}`;
+  window.location.href="mailto:zanacam2005@gmail.com?subject=New Zana Sweet Room Order&body="+encodeURIComponent(body);
+}
 </script>
 
 <script>
