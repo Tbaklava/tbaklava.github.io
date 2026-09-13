@@ -59,14 +59,14 @@ h1 span{color:var(--gold)}
 .category small{color:var(--muted);font-size:12px}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .card{background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 5px 20px #633b2c08}
-.card img{width:100%;height:190px;object-fit:cover}
-.gallery{position:relative}
-.gallery .gallery-img{display:block}
-.gnav{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:var(--brown);font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.18)}
-.gnav.prev{right:8px}
-.gnav.next{left:8px}
-.gcount{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;border-radius:999px;padding:3px 9px}
-.gallery.gallery-single .gnav,.gallery.gallery-single .gcount{display:none}
+.card img{width:100%;height:190px;object-fit:cover;display:block}
+.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:bold}
+.tab.active{background:var(--brown);color:#fff;border-color:var(--brown)}
+.pagination{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
+.pagination button{border:1px solid var(--line);background:#fff;color:var(--brown);border-radius:999px;padding:9px 16px;font-weight:bold}
+.pagination button:disabled{opacity:.4}
+.pagination span{color:var(--muted);font-size:13px;font-weight:bold}
 .card-body{padding:17px}
 .code{font-size:11px;color:var(--gold);font-weight:bold;letter-spacing:1px}
 .card h3{margin:5px 0;font-size:17px}
@@ -152,49 +152,49 @@ footer h3{margin-top:0}
 <div class="section-head"><div><h2 data-i18n="categoryTitle">جۆرەکانی شیرینی</h2><p data-i18n="categoryText">هەڵبژاردەیەکی خۆش بۆ هەموو ذوقێک</p></div></div>
 <div class="categories">
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('BAK')">
   <img src="BAK-001.png">
   <b>BAK · پاقلاوە</b>
   <small data-i18n="tray">بە سینی</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('CHR')">
   <img src="CHR-001.png">
   <b>CHR · چۆرەك</b>
   <small data-i18n="carton">بە کارتۆن</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('CUP')">
   <img src="CUP-001.png">
   <b>CUP · کاب‌کیک</b>
   <small data-i18n="pieces">٢٤ دانە</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('KUN')">
   <img src="KUN-001.png">
   <b>KUN · کونافە</b>
   <small data-i18n="kilo">بە کیلۆ</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('BKS')">
   <img src="BKS-001.png">
   <b>BKS · بەقسەم</b>
   <small>بە کیسە</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('DAT')">
   <img src="DAT-001.png">
   <b>DAT · داتلی</b>
   <small>بە سینی</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('DHN')">
   <img src="DHN-001.png">
   <b>DHN · دهنە</b>
   <small>بە سینی</small>
 </a>
 
-<a class="category" href="#products">
+<a class="category" href="#products" onclick="selectCategory('ZND')">
   <img src="ZND-001.png">
   <b>ZND · زنود</b>
   <small>بە سینی</small>
@@ -203,106 +203,28 @@ footer h3{margin-top:0}
 </div></div></section>
 
 <section class="section" id="products"><div class="container">
-<div class="section-head"><div><h2 data-i18n="featured">بەرهەمە هەڵبژێردراوەکان</h2><p data-i18n="featuredText">کۆدەکە هەڵبژێرە و زیاد بکە بۆ ئۆردەرەکەت</p></div></div>
-<div class="products">
-<div class="card" data-prefix="BAK" data-count="15"><div class="gallery"><img class="gallery-img" src="BAK-001.png"><button class="gnav prev" onclick="galleryNav(this,1)">‹</button><button class="gnav next" onclick="galleryNav(this,-1)">›</button><span class="gcount">1/15</span></div><div class="card-body"><span class="code">BAK-001</span><h3 data-i18n="baklava">پاقلاوەی تایبەت</h3><p data-i18n="baklavaDesc">پاقلاوەی پڕ لە فستەق و تامی خۆش.</p><div class="card-bottom"><span class="price">3,000 د.ع</span><button class="add" onclick="addItem('BAK-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
-<div class="card" data-prefix="CHR" data-count="31"><div class="gallery"><img class="gallery-img" src="CHR-001.png"><button class="gnav prev" onclick="galleryNav(this,1)">‹</button><button class="gnav next" onclick="galleryNav(this,-1)">›</button><span class="gcount">1/31</span></div><div class="card-body"><span class="code">CHR-001</span><h3 data-i18n="chorek">چۆرەك</h3><p data-i18n="chorekDesc">چۆرەكی نەرم و تازە بۆ بەیانی.</p><div class="card-bottom"><span class="price">11,000 د.ع</span><button class="add" onclick="addItem('CHR-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
-<div class="card" data-prefix="CUP" data-count="5"><div class="gallery"><img class="gallery-img" src="CUP-001.png"><button class="gnav prev" onclick="galleryNav(this,1)">‹</button><button class="gnav next" onclick="galleryNav(this,-1)">›</button><span class="gcount">1/5</span></div><div class="card-body"><span class="code">CUP-001</span><h3 data-i18n="cupcake">کاب‌کیک</h3><p data-i18n="cupDesc">کاب‌کیکی جوان و گونجاو بۆ میوانی.</p><div class="card-bottom"><span class="price">4,500 د.ع</span><button class="add" onclick="addItem('CUP-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
-<div class="card" data-prefix="KUN" data-count="1"><div class="gallery gallery-single"><img class="gallery-img" src="KUN-001.png"><button class="gnav prev" onclick="galleryNav(this,1)">‹</button><button class="gnav next" onclick="galleryNav(this,-1)">›</button><span class="gcount">1/1</span></div><div class="card-body"><span class="code">KUN-001</span><h3 data-i18n="kunafa">کونافە</h3><p data-i18n="kunDesc">کونافەی گەرم و پڕ لە تامی شیرین.</p><div class="card-bottom"><span class="price">4,000 د.ع</span><button class="add" onclick="addItem('KUN-001')">+ <span data-i18n="add">زیادکردن</span></button></div></div></div>
+<div class="section-head"><div><h2 data-i18n="featured">بەرهەمە هەڵبژێردراوەکان</h2><p data-i18n="featuredText">جۆرێک هەڵبژێرە و وێنەی دڵخوازت زیاد بکە بۆ ئۆردەرەکەت</p></div></div>
 
-<!-- DHN - Duhna -->
-<div class="card" data-prefix="DHN" data-count="1">
-  <div class="gallery gallery-single">
-    <img class="gallery-img" src="DHN-001.png">
-    <button class="gnav prev" onclick="galleryNav(this,1)">‹</button>
-    <button class="gnav next" onclick="galleryNav(this,-1)">›</button>
-    <span class="gcount">1/1</span>
-  </div>
-  <div class="card-body">
-    <span class="code">DHN-001</span>
-    <h3 data-i18n="duhna">دهنە</h3>
-    <p data-i18n="duhnaDesc">
-      دهنەی تازە و خۆش بۆ میوانی.
-    </p>
-    <div class="card-bottom">
-      <span class="price">3,000 د.ع</span>
-      <button class="add" onclick="addItem('DHN-001')">
-        + <span data-i18n="add">زیادکردن</span>
-      </button>
-    </div>
-  </div>
+<div class="cat-tabs" id="catTabs">
+  <button type="button" class="tab active" data-cat="BAK">پاقلاوە</button>
+  <button type="button" class="tab" data-cat="CHR">چۆرەك</button>
+  <button type="button" class="tab" data-cat="CUP">کاب‌کیک</button>
+  <button type="button" class="tab" data-cat="KUN">کونافە</button>
+  <button type="button" class="tab" data-cat="ZND">زنود</button>
+  <button type="button" class="tab" data-cat="DHN">دهنە</button>
+  <button type="button" class="tab" data-cat="DAT">داتلی</button>
+  <button type="button" class="tab" data-cat="BKS">بەقسەم</button>
 </div>
 
-<!-- ZND - Znood -->
-<div class="card" data-prefix="ZND" data-count="3">
-  <div class="gallery">
-    <img class="gallery-img" src="ZND-001.png">
-    <button class="gnav prev" onclick="galleryNav(this,1)">‹</button>
-    <button class="gnav next" onclick="galleryNav(this,-1)">›</button>
-    <span class="gcount">1/3</span>
-  </div>
-  <div class="card-body">
-    <span class="code">ZND-001</span>
-    <h3 data-i18n="znood">زنود</h3>
-    <p data-i18n="znoodDesc">
-      زنودی خۆش و تازە بۆ هەموو بۆنەکان.
-    </p>
-    <div class="card-bottom">
-      <span class="price">4,000 د.ع</span>
-      <button class="add" onclick="addItem('ZND-001')">
-        + <span data-i18n="add">زیادکردن</span>
-      </button>
-    </div>
-  </div>
+<div class="products" id="productsGrid"></div>
+
+<div class="pagination" id="pagination">
+  <button type="button" id="prevPage">‹ پێشتر</button>
+  <span id="pageInfo">1 / 1</span>
+  <button type="button" id="nextPage">دواتر ›</button>
 </div>
 
-<!-- BKS - Baqsim -->
-<div class="card" data-prefix="BKS" data-count="1">
-  <div class="gallery gallery-single">
-    <img class="gallery-img" src="BKS-001.png">
-    <button class="gnav prev" onclick="galleryNav(this,1)">‹</button>
-    <button class="gnav next" onclick="galleryNav(this,-1)">›</button>
-    <span class="gcount">1/1</span>
-  </div>
-  <div class="card-body">
-    <span class="code">BKS-001</span>
-    <h3 data-i18n="baqsim">بەقسەم</h3>
-    <p data-i18n="baqsimDesc">
-      بەقسەمی خۆش و تەنک بۆ چێژ و میوانی.
-    </p>
-    <div class="card-bottom">
-      <span class="price">11,250 د.ع</span>
-      <button class="add" onclick="addItem('BKS-001')">
-        + <span data-i18n="add">زیادکردن</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- DAT - Dates -->
-<div class="card" data-prefix="DAT" data-count="5">
-  <div class="gallery">
-    <img class="gallery-img" src="DAT-001.png">
-    <button class="gnav prev" onclick="galleryNav(this,1)">‹</button>
-    <button class="gnav next" onclick="galleryNav(this,-1)">›</button>
-    <span class="gcount">1/5</span>
-  </div>
-  <div class="card-body">
-    <span class="code">DAT-001</span>
-    <h3 data-i18n="dates">داتلی</h3>
-    <p data-i18n="datesDesc">
-      داتلیی خۆش و تازە بۆ میوانی و بۆنەکان.
-    </p>
-    <div class="card-bottom">
-      <span class="price">15,000 د.ع</span>
-      <button class="add" onclick="addItem('DAT-001')">
-        + <span data-i18n="add">زیادکردن</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-</div></div></section>
+</div></section>
 
 <section class="section"><div class="container features">
 <div class="feature"><div class="icon">🚚</div><h3 data-i18n="f1">گەیاندنی خۆڕایی</h3><p data-i18n="f1t">بۆ سلێمانی، کەرکوک، دیالە و بەغدا.</p></div>
@@ -341,33 +263,64 @@ function setLang(lang){
  document.documentElement.lang=lang;document.documentElement.dir=lang==="en"?"ltr":"rtl";
  document.querySelectorAll("[data-i18n]").forEach(el=>{let k=el.dataset.i18n;if(dict[lang][k]!==undefined)el.innerHTML=dict[lang][k]});
 }
+const catData={
+  BAK:{count:15,name:"پاقلاوەی تایبەت",desc:"پاقلاوەی پڕ لە فستەق و تامی خۆش.",price:"3,000"},
+  CHR:{count:31,name:"چۆرەك",desc:"چۆرەكی نەرم و تازە بۆ بەیانی.",price:"11,000"},
+  CUP:{count:5,name:"کاب‌کیک",desc:"کاب‌کیکی جوان و گونجاو بۆ میوانی.",price:"4,500"},
+  KUN:{count:1,name:"کونافە",desc:"کونافەی گەرم و پڕ لە تامی شیرین.",price:"4,000"},
+  ZND:{count:3,name:"زنود",desc:"زنودی خۆش و تازە بۆ هەموو بۆنەکان.",price:"4,000"},
+  DHN:{count:1,name:"دهنە",desc:"دهنەی تازە و خۆش بۆ میوانی.",price:"3,000"},
+  DAT:{count:5,name:"داتلی",desc:"داتلیی خۆش و تازە بۆ میوانی و بۆنەکان.",price:"15,000"},
+  BKS:{count:1,name:"بەقسەم",desc:"بەقسەمی خۆش و تەنک بۆ چێژ و میوانی.",price:"11,250"}
+};
+const PAGE_SIZE=8;
+let currentCat="BAK";
+let currentPage=1;
 function padNum(n){return String(n).padStart(3,'0');}
-function setGalleryImage(gallery){
-  const card=gallery.closest('.card');
-  const prefix=card.dataset.prefix;
-  const idx=parseInt(gallery.dataset.index,10);
-  const img=gallery.querySelector('.gallery-img');
-  img.dataset.fallback='';
-  img.src=`${prefix}-${padNum(idx)}.png`;
-  const c=gallery.querySelector('.gcount');
-  if(c) c.textContent=`${idx}/${card.dataset.count}`;
-}
-function galleryNav(btn,dir){
-  const gallery=btn.closest('.gallery');
-  const card=gallery.closest('.card');
-  const count=parseInt(card.dataset.count,10);
-  let idx=parseInt(gallery.dataset.index,10)+dir;
-  if(idx<1) idx=count;
-  if(idx>count) idx=1;
-  gallery.dataset.index=idx;
-  setGalleryImage(gallery);
-}
-function initGalleries(){
-  document.querySelectorAll('.gallery').forEach(g=>{
-    g.dataset.index=1;
-    const card=g.closest('.card');
-    if(parseInt(card.dataset.count,10)<=1) g.classList.add('gallery-single');
+function applyImgFallback(img){
+  img.addEventListener('error',function(){
+    if(this.dataset.fallback) return;
+    this.dataset.fallback='1';
+    this.src=IMG_FALLBACK;
   });
+}
+function renderProducts(){
+  const grid=document.getElementById('productsGrid');
+  const info=catData[currentCat];
+  const totalPages=Math.max(1,Math.ceil(info.count/PAGE_SIZE));
+  if(currentPage>totalPages) currentPage=totalPages;
+  const start=(currentPage-1)*PAGE_SIZE+1;
+  const end=Math.min(start+PAGE_SIZE-1,info.count);
+  let html='';
+  for(let i=start;i<=end;i++){
+    const code=`${currentCat}-${padNum(i)}`;
+    html+=`<div class="card"><img src="${code}.png" loading="lazy"><div class="card-body"><span class="code">${code}</span><h3>${info.name}</h3><p>${info.desc}</p><div class="card-bottom"><span class="price">${info.price} د.ع</span><button class="add" onclick="addItem('${code}')">+ <span>زیادکردن</span></button></div></div></div>`;
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll('img').forEach(applyImgFallback);
+  document.getElementById('pageInfo').textContent=`${currentPage} / ${totalPages}`;
+  document.getElementById('prevPage').disabled=currentPage<=1;
+  document.getElementById('nextPage').disabled=currentPage>=totalPages;
+  document.getElementById('pagination').style.display=totalPages<=1?'none':'flex';
+}
+function selectCategory(cat){
+  currentCat=cat;
+  currentPage=1;
+  document.querySelectorAll('#catTabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));
+  renderProducts();
+}
+function initProducts(){
+  document.getElementById('catTabs').addEventListener('click',e=>{
+    const btn=e.target.closest('.tab');
+    if(!btn) return;
+    selectCategory(btn.dataset.cat);
+  });
+  document.getElementById('prevPage').addEventListener('click',()=>{if(currentPage>1){currentPage--;renderProducts();}});
+  document.getElementById('nextPage').addEventListener('click',()=>{
+    const totalPages=Math.ceil(catData[currentCat].count/PAGE_SIZE);
+    if(currentPage<totalPages){currentPage++;renderProducts();}
+  });
+  renderProducts();
 }
 function addItem(code){count++;document.getElementById("cartCount").textContent=count;document.getElementById("details").value+=(document.getElementById("details").value?"\n":"")+code+" × 1";showToast("✓ "+code+" added");}
 function showToast(text){let t=document.getElementById("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
@@ -385,14 +338,14 @@ function submitOrder(e){
 </script>
 
 <script>
+const IMG_FALLBACK = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="#f4e7d5"/><circle cx="400" cy="235" r="130" fill="#6b3f2d"/><text x="400" y="245" text-anchor="middle" font-size="92">🍰</text><text x="400" y="405" text-anchor="middle" font-family="Arial" font-size="34" fill="#6b3f2d">Zana Sweet Room</text></svg>`);
 (function(){
-  initGalleries();
-  const fallback = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="#f4e7d5"/><circle cx="400" cy="235" r="130" fill="#6b3f2d"/><text x="400" y="245" text-anchor="middle" font-size="92">🍰</text><text x="400" y="405" text-anchor="middle" font-family="Arial" font-size="34" fill="#6b3f2d">Zana Sweet Room</text></svg>`);
+  initProducts();
   document.querySelectorAll('img').forEach(img=>{
     img.addEventListener('error',function(){
       if(this.dataset.fallback) return;
       this.dataset.fallback='1';
-      this.src=fallback;
+      this.src=IMG_FALLBACK;
     });
   });
 })();
