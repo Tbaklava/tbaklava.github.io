@@ -153,31 +153,31 @@ footer h3{margin-top:0}
 <div class="categories">
 
 <a class="category" href="#products" onclick="selectCategory('BAK')">
-  <img src="BAK-001.png">
+  <img src="BAK-001.jpg">
   <b>BAK · پاقلاوە</b>
   <small data-i18n="tray">بە سینی</small>
 </a>
 
 <a class="category" href="#products" onclick="selectCategory('CHR')">
-  <img src="CHR-001.png">
+  <img src="CHR-001.jpg">
   <b>CHR · چۆرەك</b>
   <small data-i18n="carton">بە کارتۆن</small>
 </a>
 
 <a class="category" href="#products" onclick="selectCategory('CUP')">
-  <img src="CUP-001.png">
+  <img src="CUP-001.jpg">
   <b>CUP · کاب‌کیک</b>
   <small data-i18n="pieces">٢٤ دانە</small>
 </a>
 
 <a class="category" href="#products" onclick="selectCategory('KUN')">
-  <img src="KUN-001.png">
+  <img src="KUN-001.jpg">
   <b>KUN · کونافە</b>
   <small data-i18n="kilo">بە کیلۆ</small>
 </a>
 
 <a class="category" href="#products" onclick="selectCategory('BKS')">
-  <img src="BKS-001.png">
+  <img src="BKS-001.jpg">
   <b>BKS · بەقسەم</b>
   <small>بە کیسە</small>
 </a>
@@ -195,7 +195,7 @@ footer h3{margin-top:0}
 </a>
 
 <a class="category" href="#products" onclick="selectCategory('ZND')">
-  <img src="ZND-001.png">
+  <img src="ZND-001.jpg">
   <b>ZND · زنود</b>
   <small>بە سینی</small>
 </a>
@@ -264,14 +264,14 @@ function setLang(lang){
  document.querySelectorAll("[data-i18n]").forEach(el=>{let k=el.dataset.i18n;if(dict[lang][k]!==undefined)el.innerHTML=dict[lang][k]});
 }
 const catData={
-  BAK:{count:15,name:"پاقلاوەی تایبەت",desc:"پاقلاوەی پڕ لە فستەق و تامی خۆش.",price:"3,000"},
-  CHR:{count:31,name:"چۆرەك",desc:"چۆرەكی نەرم و تازە بۆ بەیانی.",price:"11,000"},
-  CUP:{count:5,name:"کاب‌کیک",desc:"کاب‌کیکی جوان و گونجاو بۆ میوانی.",price:"4,500"},
-  KUN:{count:1,name:"کونافە",desc:"کونافەی گەرم و پڕ لە تامی شیرین.",price:"4,000"},
-  ZND:{count:3,name:"زنود",desc:"زنودی خۆش و تازە بۆ هەموو بۆنەکان.",price:"4,000"},
-  DHN:{count:1,name:"دهنە",desc:"دهنەی تازە و خۆش بۆ میوانی.",price:"3,000"},
-  DAT:{count:5,name:"داتلی",desc:"داتلیی خۆش و تازە بۆ میوانی و بۆنەکان.",price:"15,000"},
-  BKS:{count:1,name:"بەقسەم",desc:"بەقسەمی خۆش و تەنک بۆ چێژ و میوانی.",price:"11,250"}
+  BAK:{count:11,name:"پاقلاوەی تایبەت",desc:"پاقلاوەی پڕ لە فستەق و تامی خۆش.",price:"3,000",real:true,ext:"jpg"},
+  CHR:{count:20,name:"چۆرەك",desc:"چۆرەكی نەرم و تازە بۆ بەیانی.",price:"11,000",real:true,ext:"jpg"},
+  CUP:{count:4,name:"کاب‌کیک",desc:"کاب‌کیکی جوان و گونجاو بۆ میوانی.",price:"4,500",real:true,ext:"jpg"},
+  KUN:{count:1,name:"کونافە",desc:"کونافەی گەرم و پڕ لە تامی شیرین.",price:"4,000",real:true,ext:"jpg"},
+  ZND:{count:1,name:"زنود",desc:"زنودی خۆش و تازە بۆ هەموو بۆنەکان.",price:"4,000",real:true,ext:"jpg"},
+  DHN:{count:1,name:"دهنە",desc:"دهنەی تازە و خۆش بۆ میوانی.",price:"3,000",real:true,ext:"png"},
+  DAT:{count:5,name:"داتلی",desc:"داتلیی خۆش و تازە بۆ میوانی و بۆنەکان.",price:"15,000",real:true,ext:"png"},
+  BKS:{count:1,name:"بەقسەم",desc:"بەقسەمی خۆش و تەنک بۆ چێژ و میوانی.",price:"11,250",real:true,ext:"jpg"}
 };
 const PAGE_SIZE=8;
 let currentCat="BAK";
@@ -294,7 +294,10 @@ function renderProducts(){
   let html='';
   for(let i=start;i<=end;i++){
     const code=`${currentCat}-${padNum(i)}`;
-    html+=`<div class="card"><img src="${code}.png" loading="lazy"><div class="card-body"><span class="code">${code}</span><h3>${info.name}</h3><p>${info.desc}</p><div class="card-bottom"><span class="price">${info.price} د.ع</span><button class="add" onclick="addItem('${code}')">+ <span>زیادکردن</span></button></div></div></div>`;
+    // If info.real is set, each item has its own uploaded photo (CODE.ext).
+    // Otherwise we fall back to the single category placeholder icon.
+    const imgSrc = info.real ? `${code}.${info.ext}` : `${currentCat}.svg`;
+    html+=`<div class="card"><img src="${imgSrc}" loading="lazy"><div class="card-body"><span class="code">${code}</span><h3>${info.name}</h3><p>${info.desc}</p><div class="card-bottom"><span class="price">${info.price} د.ع</span><button class="add" onclick="addItem('${code}')">+ <span>زیادکردن</span></button></div></div></div>`;
   }
   grid.innerHTML=html;
   grid.querySelectorAll('img').forEach(applyImgFallback);
