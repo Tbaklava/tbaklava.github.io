@@ -368,8 +368,9 @@ function initProducts(){
   renderProducts();
 }
 const cart={}; // { code: qty }
-const WHATSAPP_NUMBER="9647709002596"; // 07709002596 in international format
-const VIBER_NUMBER="+9647709002596";
+const WHATSAPP_NUMBER="9647731565510"; // 07731565510 in international format
+const VIBER_NUMBER="+9647731565510";
+const TELEGRAM_USERNAME="Camb2005";
 
 function priceOf(code){
   const prefix=code.split('-')[0];
@@ -538,7 +539,7 @@ function sendOrder(channel){
   if(channel==='whatsapp'){
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`,'_blank');
   }else if(channel==='telegram'){
-    window.open(`https://t.me/share/url?url=&text=${encoded}`,'_blank');
+    window.open(`https://t.me/${TELEGRAM_USERNAME}?text=${encoded}`,'_blank');
   }else if(channel==='viber'){
     window.open(`viber://forward?text=${encoded}`,'_blank');
   }else if(channel==='email'){
