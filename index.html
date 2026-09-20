@@ -82,6 +82,30 @@ h1 span{color:var(--gold)}
 .order-box{background:linear-gradient(135deg,#633b2c,#8b543b);color:#fff;border-radius:30px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:25px}
 .order-box p{color:#f6dfca}
 .order-form{background:#fff;color:var(--ink);border-radius:22px;padding:22px}
+.cart-head{font-weight:bold;font-size:16px;margin:18px 0 10px;color:var(--brown)}
+.cart-empty{color:var(--muted);font-size:13px;background:#f7ead9;border-radius:14px;padding:14px}
+.cart-list{display:flex;flex-direction:column;gap:10px}
+.cart-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:16px;padding:10px;transition:.15s;background:#fff}
+.cart-item:hover{box-shadow:0 6px 18px #633b2c14;transform:translateY(-1px)}
+.cart-item img{width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-info b{display:block;font-size:14px}
+.cart-item-info small{color:var(--muted);font-size:11px}
+.cart-qty{display:flex;align-items:center;gap:6px}
+.cart-qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:#f7ead9;color:var(--brown);font-weight:bold}
+.cart-line-price{font-weight:bold;color:var(--brown);font-size:13px;min-width:70px;text-align:center}
+.cart-remove{border:0;background:none;color:#b23b3b;font-size:16px;padding:4px}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:15px}
+.send-row{margin-top:18px}
+.send-label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:bold}
+.send-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.send-btn{border:0;border-radius:14px;padding:12px;font-weight:bold;color:#fff}
+.send-btn.wa{background:#25D366}
+.send-btn.tg{background:#229ED9}
+.send-btn.vb{background:#7360F2}
+.send-btn.em{background:var(--brown)}
+.receipt-btn{width:100%;margin-top:12px;border:2px dashed var(--gold);background:#fff7ea;color:var(--brown);border-radius:14px;padding:13px;font-weight:bold}
+.receipt-hint{font-size:11px;color:var(--muted);margin:6px 2px 0;text-align:center}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 label{display:block;font-size:12px;font-weight:bold;color:var(--muted);margin-bottom:5px}
 input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;outline:none}
@@ -234,13 +258,31 @@ footer h3{margin-top:0}
 
 <section class="section" id="order"><div class="container">
 <div class="order-box"><div><span class="eyebrow">📦 <span data-i18n="orderEyebrow">ئۆردەری خۆت ئێستا تۆمار بکە</span></span><h2 data-i18n="orderTitle">شیرینییە دڵخوازەکانت هەڵبژێرە</h2><p data-i18n="orderText">فۆڕمەکە پڕ بکەرەوە. تیمی زانا پەیوەندیت پێوە دەکات بۆ پشتڕاستکردنەوەی ئۆردەرەکە.</p><p>📍 <span data-i18n="address">سلێمانی، تۆوی مەلیک، نزیک بازاڕی ئیستانبوڵ</span></p></div>
-<form class="order-form" onsubmit="submitOrder(event)"><div class="form-grid">
+<div class="order-form">
+<div class="form-grid">
 <div><label data-i18n="name">ناوی تەواو</label><input id="name" required></div>
 <div><label data-i18n="phone">ژمارەی مۆبایل</label><input id="phone" required></div>
 <div><label data-i18n="city">شار</label><select id="city"><option>سلێمانی</option><option>کەرکوک</option><option>دیالە</option><option>بەغدا</option></select></div>
 <div><label data-i18n="time">کاتی گەیاندن</label><select id="time"><option>زووترین کات دوای ٣ کاتژمێر</option><option>بەیانی</option><option>نیوەڕۆ</option><option>ئێوارە</option><option>سبەی</option><option>لە ٢-٣ ڕۆژی داهاتوو</option></select></div>
-<div class="full"><label data-i18n="details">وردەکاری ئۆردەر</label><textarea id="details" placeholder="BAK-001 × 2 ..."></textarea></div>
-</div><button class="submit" type="submit" data-i18n="submit">ناردنی ئۆردەر بە ئیمەیڵ</button></form>
+</div>
+
+<div class="cart-head">🧾 سەبەتەی ئۆردەر</div>
+<div id="cartEmpty" class="cart-empty">هێشتا هیچ بەرهەمێکت زیاد نەکردووە. سەیری بەرهەمەکان بکە و "زیادکردن" بکە.</div>
+<div id="cartList" class="cart-list"></div>
+<div id="cartTotalRow" class="cart-total-row" style="display:none"><span>کۆی گشتی</span><strong id="cartTotalValue">0 د.ع</strong></div>
+
+<div class="send-row" id="sendRow" style="display:none">
+  <span class="send-label">ناردنی ئۆردەر لە ڕێگەی:</span>
+  <div class="send-buttons">
+    <button type="button" class="send-btn wa" onclick="sendOrder('whatsapp')">💬 واتساپ</button>
+    <button type="button" class="send-btn tg" onclick="sendOrder('telegram')">✈️ تێلێگرام</button>
+    <button type="button" class="send-btn vb" onclick="sendOrder('viber')">💜 ڤایبەر</button>
+    <button type="button" class="send-btn em" onclick="sendOrder('email')">✉️ ئیمەیڵ</button>
+  </div>
+  <button type="button" class="receipt-btn" onclick="downloadReceipt()">📸 داگرتنی وەسڵ وەک وێنە</button>
+  <p class="receipt-hint">وێنەی وەسڵەکە دادەگیرێت — دواتر دەتوانیت وەک هاوپێچ لەگەڵ پەیامەکەت بیبەیت بۆ واتساپ/تێلێگرام/ڤایبەر.</p>
+</div>
+</div>
 </div></div></section>
 </main>
 
@@ -325,19 +367,186 @@ function initProducts(){
   });
   renderProducts();
 }
-function addItem(code){count++;document.getElementById("cartCount").textContent=count;document.getElementById("details").value+=(document.getElementById("details").value?"\n":"")+code+" × 1";showToast("✓ "+code+" added");}
-function showToast(text){let t=document.getElementById("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
-function toggleNav(){let n=document.getElementById("nav");n.style.display=n.style.display==="flex"?"none":"flex";n.style.flexDirection="column";n.style.position="absolute";n.style.top="70px";n.style.right="4%";n.style.background="#fffaf3";n.style.padding="18px";n.style.border="1px solid #eadfd4";n.style.borderRadius="18px"}
-function submitOrder(e){
-  e.preventDefault();
-  const nameVal=document.getElementById("name").value;
-  const phoneVal=document.getElementById("phone").value;
+const cart={}; // { code: qty }
+const WHATSAPP_NUMBER="9647709002596"; // 07709002596 in international format
+const VIBER_NUMBER="+9647709002596";
+
+function priceOf(code){
+  const prefix=code.split('-')[0];
+  return parseInt(catData[prefix].price.replace(/,/g,''),10);
+}
+function nameOf(code){
+  const prefix=code.split('-')[0];
+  return catData[prefix].name;
+}
+function imgOf(code){
+  const prefix=code.split('-')[0];
+  const info=catData[prefix];
+  return info.real ? `${code}.${info.ext}` : `${prefix}.svg`;
+}
+function addItem(code){
+  cart[code]=(cart[code]||0)+1;
+  renderCart();
+  showToast("✓ "+code+" زیادکرا");
+}
+function changeQty(code,delta){
+  cart[code]=(cart[code]||0)+delta;
+  if(cart[code]<=0) delete cart[code];
+  renderCart();
+}
+function removeItem(code){
+  delete cart[code];
+  renderCart();
+}
+function renderCart(){
+  const codes=Object.keys(cart);
+  const list=document.getElementById('cartList');
+  const empty=document.getElementById('cartEmpty');
+  const totalRow=document.getElementById('cartTotalRow');
+  const sendRow=document.getElementById('sendRow');
+  let totalQty=0, totalPrice=0;
+  if(codes.length===0){
+    list.innerHTML='';
+    empty.style.display='block';
+    totalRow.style.display='none';
+    sendRow.style.display='none';
+  }else{
+    empty.style.display='none';
+    totalRow.style.display='flex';
+    sendRow.style.display='block';
+    let html='';
+    codes.forEach(code=>{
+      const qty=cart[code];
+      const unit=priceOf(code);
+      const line=unit*qty;
+      totalQty+=qty; totalPrice+=line;
+      html+=`<div class="cart-item">
+        <img src="${imgOf(code)}" loading="lazy">
+        <div class="cart-item-info"><b>${nameOf(code)}</b><small>${code} · ${unit.toLocaleString()} د.ع بۆ دانە</small></div>
+        <div class="cart-qty">
+          <button type="button" onclick="changeQty('${code}',-1)">−</button>
+          <span>${qty}</span>
+          <button type="button" onclick="changeQty('${code}',1)">+</button>
+        </div>
+        <div class="cart-line-price">${line.toLocaleString()} د.ع</div>
+        <button type="button" class="cart-remove" onclick="removeItem('${code}')">✕</button>
+      </div>`;
+    });
+    list.innerHTML=html;
+    document.getElementById('cartTotalValue').textContent=totalPrice.toLocaleString()+' د.ع';
+  }
+  count=totalQty;
+  document.getElementById("cartCount").textContent=count;
+}
+function buildOrderText(){
+  const nameVal=document.getElementById("name").value||'-';
+  const phoneVal=document.getElementById("phone").value||'-';
   const cityVal=document.getElementById("city").value;
   const timeVal=document.getElementById("time").value;
-  const detailsVal=document.getElementById("details").value;
-  let body=`ناو: ${nameVal}\nمۆبایل: ${phoneVal}\nشار: ${cityVal}\nکاتی گەیاندن: ${timeVal}\nئۆردەر:\n${detailsVal}`;
-  window.location.href="mailto:zanacam2005@gmail.com?subject=New Zana Sweet Room Order&body="+encodeURIComponent(body);
+  const codes=Object.keys(cart);
+  let itemsText='';
+  let total=0;
+  codes.forEach(code=>{
+    const qty=cart[code];
+    const unit=priceOf(code);
+    const line=unit*qty;
+    total+=line;
+    itemsText+=`• ${nameOf(code)} (${code}) × ${qty} — ${unit.toLocaleString()} د.ع = ${line.toLocaleString()} د.ع\n`;
+  });
+  return `📦 ئۆردەری نوێ - Zana Sweet Room\n\nناو: ${nameVal}\nمۆبایل: ${phoneVal}\nشار: ${cityVal}\nکاتی گەیاندن: ${timeVal}\n\nبەرهەمەکان:\n${itemsText}\nکۆی گشتی: ${total.toLocaleString()} د.ع`;
 }
+function downloadReceipt(){
+  if(Object.keys(cart).length===0){ showToast("سەبەتەکە بەتاڵە"); return; }
+  const nameVal=document.getElementById("name").value||'-';
+  const phoneVal=document.getElementById("phone").value||'-';
+  const cityVal=document.getElementById("city").value;
+  const timeVal=document.getElementById("time").value;
+  const codes=Object.keys(cart);
+  const rowH=54;
+  const headH=190;
+  const footH=150;
+  const W=700;
+  const H=headH+codes.length*rowH+footH;
+  const canvas=document.createElement('canvas');
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  // background
+  ctx.fillStyle='#fffaf3'; ctx.fillRect(0,0,W,H);
+  // header band
+  ctx.fillStyle='#633b2c'; ctx.fillRect(0,0,W,110);
+  ctx.fillStyle='#ffffff'; ctx.font='bold 30px Georgia, serif'; ctx.textAlign='center';
+  ctx.fillText('Zana Sweet Room 🍰', W/2, 50);
+  ctx.font='16px Tahoma, Arial'; ctx.fillStyle='#f0d9c0';
+  ctx.fillText('وەسڵی ئۆردەر · Order Receipt', W/2, 80);
+  // customer info
+  ctx.textAlign='right'; ctx.fillStyle='#2e211c'; ctx.font='bold 16px Tahoma, Arial';
+  let y=140;
+  ctx.fillText('ناو: '+nameVal, W-30, y); y+=26;
+  ctx.fillText('مۆبایل: '+phoneVal, W-30, y); y+=26;
+  ctx.fillText('شار: '+cityVal+'   |   کاتی گەیاندن: '+timeVal, W-30, y); y+=18;
+  ctx.strokeStyle='#eadfd4'; ctx.beginPath(); ctx.moveTo(30,y+10); ctx.lineTo(W-30,y+10); ctx.stroke();
+  y+=40;
+  // table header
+  ctx.font='bold 14px Tahoma, Arial'; ctx.fillStyle='#78665d';
+  ctx.fillText('بەرهەم', W-30, y);
+  ctx.fillText('دانە', 260, y);
+  ctx.fillText('نرخی دانە', 170, y);
+  ctx.fillText('کۆی ڕیز', 60, y);
+  y+=14;
+  ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(W-30,y); ctx.stroke();
+  y+=8;
+  let total=0;
+  codes.forEach(code=>{
+    const qty=cart[code];
+    const unit=priceOf(code);
+    const line=unit*qty;
+    total+=line;
+    y+=32;
+    ctx.font='bold 15px Tahoma, Arial'; ctx.fillStyle='#2e211c';
+    ctx.fillText(nameOf(code)+' ('+code+')', W-30, y);
+    ctx.font='14px Tahoma, Arial';
+    ctx.fillText(String(qty), 265, y);
+    ctx.fillText(unit.toLocaleString()+' د.ع', 175, y);
+    ctx.font='bold 14px Tahoma, Arial'; ctx.fillStyle='#633b2c';
+    ctx.fillText(line.toLocaleString()+' د.ع', 40, y);
+    ctx.strokeStyle='#f3e9dc'; ctx.beginPath(); ctx.moveTo(30,y+18); ctx.lineTo(W-30,y+18); ctx.stroke();
+  });
+  y+=50;
+  ctx.fillStyle='#f7ead9'; ctx.fillRect(30,y-30,W-60,46);
+  ctx.font='bold 20px Georgia, serif'; ctx.fillStyle='#633b2c';
+  ctx.fillText('کۆی گشتی', W-45, y);
+  ctx.fillText(total.toLocaleString()+' د.ع', 60, y);
+  y+=70;
+  ctx.strokeStyle='#eadfd4'; ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(W-30,y); ctx.stroke();
+  y+=30;
+  ctx.font='13px Tahoma, Arial'; ctx.fillStyle='#78665d';
+  ctx.fillText('📞 07709002596   ·   💬 WhatsApp 07731565510', W-30, y); y+=24;
+  ctx.fillText('✉️ zanacam2005@gmail.com', W-30, y); y+=24;
+  ctx.font='italic 13px Tahoma, Arial';
+  ctx.fillText('تامی خۆشی، لە هەر دانەیەکدا ✨', W-30, y);
+
+  const link=document.createElement('a');
+  link.download='Zana-Sweet-Room-Receipt.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  showToast('✓ وەسڵەکە داگیرا');
+}
+function sendOrder(channel){
+  if(Object.keys(cart).length===0){ showToast("سەبەتەکە بەتاڵە"); return; }
+  const text=buildOrderText();
+  const encoded=encodeURIComponent(text);
+  if(channel==='whatsapp'){
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`,'_blank');
+  }else if(channel==='telegram'){
+    window.open(`https://t.me/share/url?url=&text=${encoded}`,'_blank');
+  }else if(channel==='viber'){
+    window.open(`viber://forward?text=${encoded}`,'_blank');
+  }else if(channel==='email'){
+    window.location.href=`mailto:zanacam2005@gmail.com?subject=${encodeURIComponent('New Zana Sweet Room Order')}&body=${encoded}`;
+  }
+}
+function showToast(text){let t=document.getElementById("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
+function toggleNav(){let n=document.getElementById("nav");n.style.display=n.style.display==="flex"?"none":"flex";n.style.flexDirection="column";n.style.position="absolute";n.style.top="70px";n.style.right="4%";n.style.background="#fffaf3";n.style.padding="18px";n.style.border="1px solid #eadfd4";n.style.borderRadius="18px"}
 </script>
 
 <script>
