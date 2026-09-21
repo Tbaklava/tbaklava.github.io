@@ -456,70 +456,101 @@ function buildOrderText(){
   });
   return `📦 ئۆردەری نوێ - Zana Sweet Room\n\nناو: ${nameVal}\nمۆبایل: ${phoneVal}\nشار: ${cityVal}\nکاتی گەیاندن: ${timeVal}\n\nبەرهەمەکان:\n${itemsText}\nکۆی گشتی: ${total.toLocaleString()} د.ع`;
 }
-function downloadReceipt(){
+async function downloadReceipt(){
   if(Object.keys(cart).length===0){ showToast("سەبەتەکە بەتاڵە"); return; }
   const nameVal=document.getElementById("name").value||'-';
   const phoneVal=document.getElementById("phone").value||'-';
   const cityVal=document.getElementById("city").value;
   const timeVal=document.getElementById("time").value;
   const codes=Object.keys(cart);
-  const rowH=54;
-  const headH=190;
-  const footH=150;
+  const rowH=64;
+  const headH=185;
+  const footH=140;
   const W=700;
   const H=headH+codes.length*rowH+footH;
+
+  // Preload thumbnails first (fallback to a plain circle if an image fails)
+  function loadImg(src){
+    return new Promise(resolve=>{
+      const img=new Image();
+      img.onload=()=>resolve(img);
+      img.onerror=()=>resolve(null);
+      img.src=src;
+    });
+  }
+  const thumbs={};
+  await Promise.all(codes.map(async code=>{
+    thumbs[code]=await loadImg(imgOf(code));
+  }));
+
   const canvas=document.createElement('canvas');
   canvas.width=W; canvas.height=H;
   const ctx=canvas.getContext('2d');
-  // background
   ctx.fillStyle='#fffaf3'; ctx.fillRect(0,0,W,H);
   // header band
-  ctx.fillStyle='#633b2c'; ctx.fillRect(0,0,W,110);
-  ctx.fillStyle='#ffffff'; ctx.font='bold 30px Georgia, serif'; ctx.textAlign='center';
-  ctx.fillText('Zana Sweet Room 🍰', W/2, 50);
-  ctx.font='16px Tahoma, Arial'; ctx.fillStyle='#f0d9c0';
-  ctx.fillText('وەسڵی ئۆردەر · Order Receipt', W/2, 80);
-  // customer info
-  ctx.textAlign='right'; ctx.fillStyle='#2e211c'; ctx.font='bold 16px Tahoma, Arial';
-  let y=140;
-  ctx.fillText('ناو: '+nameVal, W-30, y); y+=26;
-  ctx.fillText('مۆبایل: '+phoneVal, W-30, y); y+=26;
-  ctx.fillText('شار: '+cityVal+'   |   کاتی گەیاندن: '+timeVal, W-30, y); y+=18;
-  ctx.strokeStyle='#eadfd4'; ctx.beginPath(); ctx.moveTo(30,y+10); ctx.lineTo(W-30,y+10); ctx.stroke();
-  y+=40;
-  // table header
-  ctx.font='bold 14px Tahoma, Arial'; ctx.fillStyle='#78665d';
-  ctx.fillText('بەرهەم', W-30, y);
-  ctx.fillText('دانە', 260, y);
-  ctx.fillText('نرخی دانە', 170, y);
-  ctx.fillText('کۆی ڕیز', 60, y);
-  y+=14;
-  ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(W-30,y); ctx.stroke();
-  y+=8;
+  ctx.fillStyle='#633b2c'; ctx.fillRect(0,0,W,100);
+  ctx.fillStyle='#ffffff'; ctx.font='bold 28px Georgia, serif'; ctx.textAlign='center';
+  ctx.fillText('Zana Sweet Room 🍰', W/2, 46);
+  ctx.font='15px Tahoma, Arial'; ctx.fillStyle='#f0d9c0';
+  ctx.fillText('🧾 وەسڵی ئۆردەر', W/2, 74);
+  // customer info (compact, one line)
+  ctx.textAlign='right'; ctx.fillStyle='#2e211c'; ctx.font='bold 14px Tahoma, Arial';
+  let y=128;
+  ctx.fillText(`${nameVal}  ·  ${phoneVal}  ·  ${cityVal}  ·  ${timeVal}`, W-30, y);
+  y+=20;
+  ctx.strokeStyle='#eadfd4'; ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(W-30,y); ctx.stroke();
+  y+=18;
+
+  const thumbSize=44;
   let total=0;
   codes.forEach(code=>{
     const qty=cart[code];
     const unit=priceOf(code);
     const line=unit*qty;
     total+=line;
-    y+=32;
+    const rowTop=y;
+    const centerY=rowTop+thumbSize/2;
+    // thumbnail on the right edge (RTL), rounded
+    const tx=W-30-thumbSize, ty=rowTop;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(tx+10,ty);
+    ctx.arcTo(tx+thumbSize,ty,tx+thumbSize,ty+thumbSize,10);
+    ctx.arcTo(tx+thumbSize,ty+thumbSize,tx,ty+thumbSize,10);
+    ctx.arcTo(tx,ty+thumbSize,tx,ty,10);
+    ctx.arcTo(tx,ty,tx+thumbSize,ty,10);
+    ctx.closePath();
+    ctx.clip();
+    if(thumbs[code]){
+      ctx.drawImage(thumbs[code],tx,ty,thumbSize,thumbSize);
+    }else{
+      ctx.fillStyle='#f0d9c0'; ctx.fillRect(tx,ty,thumbSize,thumbSize);
+    }
+    ctx.restore();
+    // name (bold) + code (muted) stacked, right-aligned, left of the thumbnail
+    const textX=tx-14;
+    ctx.textAlign='right';
     ctx.font='bold 15px Tahoma, Arial'; ctx.fillStyle='#2e211c';
-    ctx.fillText(nameOf(code)+' ('+code+')', W-30, y);
-    ctx.font='14px Tahoma, Arial';
-    ctx.fillText(String(qty), 265, y);
-    ctx.fillText(unit.toLocaleString()+' د.ع', 175, y);
-    ctx.font='bold 14px Tahoma, Arial'; ctx.fillStyle='#633b2c';
-    ctx.fillText(line.toLocaleString()+' د.ع', 40, y);
-    ctx.strokeStyle='#f3e9dc'; ctx.beginPath(); ctx.moveTo(30,y+18); ctx.lineTo(W-30,y+18); ctx.stroke();
+    ctx.fillText(qty>1?`${nameOf(code)} ×${qty}`:nameOf(code), textX, centerY-3);
+    ctx.font='12px Tahoma, Arial'; ctx.fillStyle='#a8631f';
+    ctx.fillText(code, textX, centerY+15);
+    // price on the far left
+    ctx.textAlign='left'; ctx.font='bold 15px Tahoma, Arial'; ctx.fillStyle='#633b2c';
+    ctx.fillText(line.toLocaleString()+' د.ع', 30, centerY+5);
+    y+=rowH;
+    ctx.strokeStyle='#f3e9dc'; ctx.beginPath(); ctx.moveTo(30,y-8); ctx.lineTo(W-30,y-8); ctx.stroke();
   });
-  y+=50;
+
+  y+=22;
   ctx.fillStyle='#f7ead9'; ctx.fillRect(30,y-30,W-60,46);
-  ctx.font='bold 20px Georgia, serif'; ctx.fillStyle='#633b2c';
+  ctx.textAlign='right'; ctx.font='bold 19px Georgia, serif'; ctx.fillStyle='#633b2c';
   ctx.fillText('کۆی گشتی', W-45, y);
-  ctx.fillText(total.toLocaleString()+' د.ع', 60, y);
-  y+=70;
+  ctx.textAlign='left';
+  ctx.fillText(total.toLocaleString()+' د.ع', 45, y);
+  y+=60;
   ctx.strokeStyle='#eadfd4'; ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(W-30,y); ctx.stroke();
-  y+=30;
+  y+=28;
+  ctx.textAlign='right';
   ctx.font='13px Tahoma, Arial'; ctx.fillStyle='#78665d';
   ctx.fillText('📞 07709002596   ·   💬 WhatsApp 07731565510', W-30, y); y+=24;
   ctx.fillText('✉️ zanacam2005@gmail.com', W-30, y); y+=24;
